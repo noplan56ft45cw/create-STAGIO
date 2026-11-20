@@ -114,22 +114,22 @@
 
   <dialog id="projectDialog">
     <form method="dialog" id="projectForm">
-      <div class="dialog-head"><h2 id="projectDialogTitle">新規プロジェクト</h2><button class="icon-btn" value="cancel" aria-label="閉じる">×</button></div>
+      <div class="dialog-head"><h2 id="projectDialogTitle">新規プロジェクト</h2><button class="icon-btn" type="button" data-close-dialog="projectDialog" aria-label="閉じる">×</button></div>
       <input type="hidden" id="editProjectId">
       <label>プロジェクト名<input id="projectName" required maxlength="80" placeholder="例：ホラーゲーム制作"></label>
       <label>ジャンル<select id="projectGenre"><option value="illustration">イラスト</option><option value="video">動画</option><option value="game">ゲーム</option><option value="3d">3D</option></select></label>
       <label>目標・説明<textarea id="projectDescription" rows="3" placeholder="完成させたいもの、目的など"></textarea></label>
-      <label>進捗 <input id="projectProgress" type="number" min="0" max="100" value="0"></label>
-      <div class="button-row"><button class="secondary" value="cancel">キャンセル</button><button class="primary" id="saveProject" value="default">保存</button></div>
+      <label>進捗 <input id="projectProgress" type="number" min="0" max="100" value="0" readonly><small class="muted">タスクの完了数から自動計算されます</small></label>
+      <div class="button-row"><button class="secondary" type="button" data-close-dialog="projectDialog">キャンセル</button><button class="primary" id="saveProject" value="default">保存</button></div>
     </form>
   </dialog>
 
   <dialog id="taskDialog">
     <form method="dialog" id="taskForm">
-      <div class="dialog-head"><h2>タスクを追加</h2><button class="icon-btn" value="cancel">×</button></div>
+      <div class="dialog-head"><h2>タスクを追加</h2><button class="icon-btn" type="button" data-close-dialog="taskDialog" aria-label="閉じる">×</button></div>
       <input type="hidden" id="taskProjectId">
       <label>タスク名<input id="taskName" required maxlength="100" placeholder="例：キャラクター案を3つ描く"></label>
-      <div class="button-row"><button class="secondary" value="cancel">キャンセル</button><button class="primary" id="saveTask" value="default">追加</button></div>
+      <div class="button-row"><button class="secondary" type="button" data-close-dialog="taskDialog">キャンセル</button><button class="primary" id="saveTask" value="default">追加</button></div>
     </form>
   </dialog>
   <div id="toast" class="toast" role="status"></div>
