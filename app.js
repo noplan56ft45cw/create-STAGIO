@@ -12,11 +12,20 @@ function clearStore(store){return new Promise((resolve,reject)=>{const t=db.tran
 async function refresh(){projects=await all('projects');assets=await all('assets');responses=await all('responses');render()}
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo(0,0)}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
-function projectCard(p){const tasks=p.tasks||[],done=tasks.filter(t=>t.done).length,progress=tasks.length?Math.round(done/tasks.length*100):0;return `<article class="project-card"><div class="project-top"><div><h3>${esc(p.name)}</h3><p>${esc(p.description||'説明はまだありません')}</p></div><span class="tag">${labels[p.genre]||'その他'}</span></div><div class="progress"><span style="width:${progress}%"></span></div><div class="muted tiny">${progress}% 完了 · タスク ${done}/${tasks.length}</div><div class="project-actions"><button class="mini-btn" data-action="task" data-id="${p.id}">＋ タスク</button><button class="mini-btn" data-action="edit" data-id="${p.id}">編集</button><button class="mini-btn" data-action="delete" data-id="${p.id}">削除</button></div>${tasks.length?`<div class="task-list">${tasks.map(t=>`<label class="task-card"><input type="checkbox" data-task="${t.id}" data-project="${p.id}" ${t.done?'checked':''} style="width:auto;margin-right:7px">${esc(t.name)}</label>`).join('')}</div>`:''}</article>`}
+function projectCard(p){
+ const tasks=p.tasks||[],done=tasks.filter(t=>t.done).length,progress=tasks.length?Math.round(done/tasks.length*100):0;
+ return `<article class="project-card">
+ <div class="project-top"><div><h3>${esc(p.name)}</h3><p>${esc(p.description||'説明はまだありません')}</p></div><span class="tag">${labels[p.genre]||'その他'}</span></div>
+ <div class="progress"><span style="width:${progress}%"></span></div>
+ <div class="muted tiny">${progress}% 完了 · タスク ${done}/${tasks.length}</div>
+ <div class="project-actions"><button class="mini-btn" data-action="task" data-id="${p.id}">＋ タスク</button><button class="mini-btn" data-action="edit" data-id="${p.id}">編集</button><button class="mini-btn danger-btn" data-action="delete" data-id="${p.id}">削除</button></div>
+ ${tasks.length?`<div class="project-task-list">${tasks.map(t=>`<div class="project-task-item"><label><input type="checkbox" data-task="${t.id}" data-project="${p.id}" ${t.done?'checked':''}><span>${esc(t.name)}</span></label><button type="button" class="task-delete-btn" data-action="delete-task" data-project-id="${p.id}" data-task-id="${t.id}" aria-label="タスクを削除">削除</button></div>`).join('')}</div>`:''}
+ </article>`;
+}
 function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function render(){ $('projectCount').textContent=projects.length;$('doneCount').textContent=projects.reduce((n,p)=>n+(p.tasks||[]).filter(t=>t.done).length,0);$('assetCount').textContent=assets.length;
  const recent=[...projects].sort((a,b)=>b.updated-a.updated).slice(0,3);$('recentProjects').innerHTML=recent.length?recent.map(projectCard).join(''):'<div class="empty">まだプロジェクトがありません。＋新規作成から始めましょう。</div>';
- const tasks=projects.flatMap(p=>(p.tasks||[]).filter(t=>!t.done).map(t=>({...t,project:p.name,pid:p.id}))).slice(0,5);$('todayTasks').innerHTML=tasks.length?tasks.map(t=>`<label class="task-card"><input type="checkbox" data-task="${t.id}" data-project="${t.pid}" style="width:auto;margin-right:8px">${esc(t.name)} <span class="muted tiny">· ${esc(t.project)}</span></label>`).join(''):'<div class="empty">未完了タスクはありません。</div>';
+ const tasks=projects.flatMap(p=>(p.tasks||[]).filter(t=>!t.done).map(t=>({...t,project:p.name,pid:p.id}))).slice(0,5);$('todayTasks').innerHTML=tasks.length?tasks.map(t=>`<label class="today-task"><input type="checkbox" data-task="${t.id}" data-project="${t.pid}">${esc(t.name)} <span class="muted tiny">· ${esc(t.project)}</span></label>`).join(''):'<div class="empty">未完了タスクはありません。</div>';
  const filtered=projects.filter(p=>projectFilter==='all'||p.genre===projectFilter);$('projectList').innerHTML=filtered.length?filtered.sort((a,b)=>b.updated-a.updated).map(projectCard).join(''):'<div class="empty">該当するプロジェクトはありません。新規作成してみましょう。</div>';
  renderAssets();$('savedResponses').innerHTML=responses.sort((a,b)=>b.created-a.created).map(r=>`<article class="response-card"><b>${esc(r.title)}</b><p>${esc(r.text)}</p><button class="mini-btn" data-response-delete="${r.id}">削除</button></article>`).join('');
 }
@@ -24,13 +33,29 @@ function renderAssets(){const arr=assets.filter(a=>assetFilter==='all'||a.type==
 function formatSize(n){if(n<1024)return n+' B';if(n<1048576)return (n/1024).toFixed(1)+' KB';return (n/1048576).toFixed(1)+' MB'}
 function openProject(p){$('editProjectId').value=p?.id||'';$('projectName').value=p?.name||'';$('projectGenre').value=p?.genre||'illustration';$('projectDescription').value=p?.description||'';$('projectProgress').value=p?.progress||0;$('projectDialogTitle').textContent=p?'プロジェクトを編集':'新規プロジェクト';$('projectDialog').showModal()}
 $('addProject').onclick=()=>openProject();$('quickAdd').onclick=()=>openProject();
-$('projectForm').addEventListener('submit',async e=>{if(e.submitter?.value==='cancel')return;e.preventDefault();const id=$('editProjectId').value||uid(),old=projects.find(p=>p.id===id);const p={id,name:$('projectName').value.trim(),genre:$('projectGenre').value,description:$('projectDescription').value.trim(),progress:(old?.tasks||[]).length?Math.round((old.tasks||[]).filter(t=>t.done).length/old.tasks.length*100):0,tasks:old?.tasks||[],created:old?.created||Date.now(),updated:Date.now()};if(!p.name)return;await put('projects',p);$('projectDialog').close();await refresh();toast('プロジェクトを保存しました')});
+$('projectForm').addEventListener('submit',async e=>{if(e.submitter?.value==='cancel')return;e.preventDefault();const id=$('editProjectId').value||uid(),old=projects.find(p=>p.id===id);const p={id,name:$('projectName').value.trim(),genre:$('projectGenre').value,description:$('projectDescription').value.trim(),progress:Number($('projectProgress').value)||0,tasks:old?.tasks||[],created:old?.created||Date.now(),updated:Date.now()};if(!p.name)return;await put('projects',p);$('projectDialog').close();await refresh();toast('プロジェクトを保存しました')});
 $('projectList').addEventListener('click',projectAction);$('recentProjects').addEventListener('click',projectAction);
-async function projectAction(e){const b=e.target.closest('[data-action]');if(!b)return;const p=projects.find(x=>x.id===b.dataset.id);if(!p)return;if(b.dataset.action==='edit')openProject(p);if(b.dataset.action==='delete'&&confirm(`「${p.name}」を削除しますか？`)){await del('projects',p.id);await refresh();toast('削除しました')}if(b.dataset.action==='task')openTask(p.id)}
+async function projectAction(e){
+ const b=e.target.closest('[data-action]');if(!b)return;
+ const action=b.dataset.action;
+ if(action==='delete-task'){
+  const p=projects.find(x=>x.id===b.dataset.projectId);if(!p)return;
+  const t=(p.tasks||[]).find(x=>x.id===b.dataset.taskId);if(!t)return;
+  if(!confirm(`タスク「${t.name}」を削除しますか？`))return;
+  p.tasks=p.tasks.filter(x=>x.id!==t.id);
+  p.progress=p.tasks.length?Math.round(p.tasks.filter(x=>x.done).length/p.tasks.length*100):0;
+  p.updated=Date.now();await put('projects',p);await refresh();toast('タスクを削除しました');return;
+ }
+ const p=projects.find(x=>x.id===b.dataset.id);if(!p)return;
+ if(action==='edit')openProject(p);
+ if(action==='delete'&&confirm(`「${p.name}」を削除しますか？\nこのプロジェクト内のタスクも削除されます。`)){
+  await del('projects',p.id);await refresh();toast('プロジェクトを削除しました');
+ }
+ if(action==='task')openTask(p.id);
+}
 function openTask(id){$('taskProjectId').value=id;$('taskName').value='';$('taskDialog').showModal()}
-document.querySelectorAll('[data-close-dialog]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.closeDialog).close()));
-$('taskForm').addEventListener('submit',async e=>{if(e.submitter?.value==='cancel')return;e.preventDefault();const p=projects.find(x=>x.id===$('taskProjectId').value);if(!p)return;p.tasks=p.tasks||[];p.tasks.push({id:uid(),name:$('taskName').value.trim(),done:false});p.progress=p.tasks.length?Math.round(p.tasks.filter(t=>t.done).length/p.tasks.length*100):0;p.updated=Date.now();await put('projects',p);$('taskDialog').close();await refresh();toast('タスクを追加しました')});
-document.addEventListener('change',async e=>{if(e.target.matches('[data-task]')){const p=projects.find(x=>x.id===e.target.dataset.project),t=p?.tasks.find(x=>x.id===e.target.dataset.task);if(t){t.done=e.target.checked;p.progress=p.tasks.length?Math.round(p.tasks.filter(x=>x.done).length/p.tasks.length*100):0;p.updated=Date.now();await put('projects',p);await refresh()}}});
+$('taskForm').addEventListener('submit',async e=>{if(e.submitter?.value==='cancel')return;e.preventDefault();const p=projects.find(x=>x.id===$('taskProjectId').value);if(!p)return;p.tasks=p.tasks||[];p.tasks.push({id:uid(),name:$('taskName').value.trim(),done:false});p.updated=Date.now();await put('projects',p);$('taskDialog').close();await refresh();toast('タスクを追加しました')});
+document.addEventListener('change',async e=>{if(e.target.matches('[data-task]')){const p=projects.find(x=>x.id===e.target.dataset.project),t=p?.tasks.find(x=>x.id===e.target.dataset.task);if(t){t.done=e.target.checked;p.updated=Date.now();await put('projects',p);await refresh()}}});
 document.querySelectorAll('#projectFilters .filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('#projectFilters .filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');projectFilter=b.dataset.filter;render()});
 $('makePrompt').onclick=()=>{const g=labels[$('promptGenre').value]||'制作',goal=$('promptGoal').value.trim(),notes=$('promptNotes').value.trim();if(!goal){toast('作りたいものを入力してください');return}$('promptOutput').value=`あなたは${g}制作を支援する専門家です。\n\n【作りたいもの】\n${goal}\n\n【希望・条件】\n${notes||'特になし'}\n\n【依頼】\n1. 具体的な制作手順を初心者にも分かるように提案してください。\n2. 必要な素材・ツール・設定を整理してください。\n3. まず取り組む最小の完成形を決めてください。\n4. 改善案と注意点も挙げてください。\n不明点があれば、作業を始める前に重要なものを一つずつ質問してください。`;toast('指示文を作成しました')};
 $('copyPrompt').onclick=async()=>{if(!$('promptOutput').value){toast('先に指示文を作成してください');return}try{await navigator.clipboard.writeText($('promptOutput').value);toast('コピーしました')}catch{ $('promptOutput').select();toast('長押ししてコピーしてください')}};
