@@ -56,18 +56,26 @@
     <section class="page" id="bridgePage">
       <div class="page-title"><div><span class="eyebrow">IDEA TO PROMPT</span><h2>ChatGPT連携</h2></div></div>
       <div id="bridgeProjectContext" class="context-strip">選択中のプロジェクト：未選択</div>
+      <div class="assistant-tabs" role="tablist" aria-label="制作ジャンル">
+        <button class="assistant-tab active" data-assistant-genre="illustration" role="tab" aria-selected="true">🎨 イラスト</button>
+        <button class="assistant-tab" data-assistant-genre="video" role="tab" aria-selected="false">🎬 動画</button>
+        <button class="assistant-tab" data-assistant-genre="game" role="tab" aria-selected="false">🎮 ゲーム</button>
+        <button class="assistant-tab" data-assistant-genre="3d" role="tab" aria-selected="false">🧊 3D</button>
+      </div>
+      <div class="assistant-intro panel"><b id="assistantTitle">イラスト制作アシスタント</b><p id="assistantDescription">キャラクター・背景・構図などの制作計画と画像生成用指示文を作成します。</p></div>
+      <div class="workflow-steps" aria-label="制作手順"><span class="workflow-step active" data-step="1">1 企画</span><span class="workflow-step" data-step="2">2 指示文</span><span class="workflow-step" data-step="3">3 ChatGPT</span><span class="workflow-step" data-step="4">4 回答保存</span></div>
       <div class="panel form-panel">
-        <label>制作ジャンル<select id="promptGenre"><option value="illustration">イラスト</option><option value="video">動画</option><option value="game">ゲーム</option><option value="3d">3D</option><option value="general">その他</option></select></label>
+        <input type="hidden" id="promptGenre" value="illustration">
         <label>作りたいもの<input id="promptGoal" placeholder="例：オリジナルキャラクターの立ち絵を作りたい"></label>
         <label>希望・条件<textarea id="promptNotes" rows="4" placeholder="雰囲気、サイズ、使うアプリ、避けたいことなど"></textarea></label>
-        <button class="primary full" id="makePrompt">プロンプトを作成</button>
+        <button class="primary full" id="makePrompt">① 制作指示文を作成</button>
       </div>
       <div class="section-head"><h2>生成された指示文</h2><span class="muted">編集して使えます</span></div>
       <textarea id="promptOutput" class="prompt-output" rows="10" placeholder="ここに指示文が表示されます。"></textarea>
-      <div class="button-row"><button class="secondary" id="copyPrompt">コピー</button><button class="primary" id="openChatGPT">ChatGPTを開く ↗</button></div>
+      <div class="button-row"><button class="secondary" id="copyPrompt">② 指示文をコピー</button><button class="primary" id="openChatGPT">③ ChatGPTを開く ↗</button></div>
       <div class="panel tip"><b>使い方</b><p>①指示文を作成 → ②コピー → ③ChatGPTで貼り付け。回答は下に保存できます。</p></div>
       <label class="response-label">ChatGPTの回答・メモ<textarea id="responseNote" rows="5" placeholder="回答や制作メモを貼り付け"></textarea></label>
-      <button class="secondary full" id="saveResponse">回答を保存</button>
+      <button class="secondary full" id="saveResponse">④ 回答をプロジェクトに保存</button>
       <div id="savedResponses" class="stack"></div>
     </section>
 

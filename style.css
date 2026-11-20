@@ -36,3 +36,6 @@
 .asset-info small{display:block;overflow-wrap:anywhere}
 .response-card p{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:390px){.project-task-item{padding:10px}.task-actions{flex-direction:column}.task-actions button{padding:6px 8px;font-size:11px}.project-actions{flex-wrap:wrap}}
+
+/* v6 AI assistant */
+.assistant-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0}.assistant-tab{min-width:0;padding:11px 4px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--muted);font-size:12px;font-weight:700}.assistant-tab.active{background:#332d67;border-color:var(--accent);color:#fff;box-shadow:0 0 0 1px #8b7cff33}.assistant-intro{margin:10px 0;padding:14px}.assistant-intro p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.7}.workflow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:14px 0}.workflow-step{padding:8px 3px;border-radius:9px;background:var(--panel);color:var(--muted);text-align:center;font-size:10px;border:1px solid var(--line)}.workflow-step.active{background:#332d67;color:#fff;border-color:var(--accent)}@media(max-width:380px){.assistant-tab{font-size:10px;padding:10px 2px}.workflow-step{font-size:9px}}
