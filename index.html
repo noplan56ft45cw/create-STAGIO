@@ -49,11 +49,13 @@
         <button class="filter" data-filter="game">ゲーム</button>
         <button class="filter" data-filter="3d">3D</button>
       </div>
+      <div id="selectedProjectBanner" class="selected-project-banner" hidden></div>
       <div id="projectList" class="stack"></div>
     </section>
 
     <section class="page" id="bridgePage">
       <div class="page-title"><div><span class="eyebrow">IDEA TO PROMPT</span><h2>ChatGPT連携</h2></div></div>
+      <div id="bridgeProjectContext" class="context-strip">選択中のプロジェクト：未選択</div>
       <div class="panel form-panel">
         <label>制作ジャンル<select id="promptGenre"><option value="illustration">イラスト</option><option value="video">動画</option><option value="game">ゲーム</option><option value="3d">3D</option><option value="general">その他</option></select></label>
         <label>作りたいもの<input id="promptGoal" placeholder="例：オリジナルキャラクターの立ち絵を作りたい"></label>
@@ -71,6 +73,7 @@
 
     <section class="page" id="assetsPage">
       <div class="page-title"><div><span class="eyebrow">YOUR MATERIALS</span><h2>素材ライブラリ</h2></div><button class="primary" id="importAssets">＋ 追加</button></div>
+      <div id="assetProjectContext" class="context-strip">選択中のプロジェクト：未選択</div>
       <p class="muted small">画像・動画・音声・3Dデータなどを端末から追加できます。保存容量はブラウザの設定に依存します。</p>
       <input type="file" id="assetPicker" hidden multiple accept="image/*,video/*,audio/*,.glb,.gltf,.obj,.fbx,.blend,.zip,.pdf">
       <div class="filters" id="assetFilters"><button class="filter active" data-filter="all">すべて</button><button class="filter" data-filter="image">画像</button><button class="filter" data-filter="video">動画</button><button class="filter" data-filter="audio">音声</button><button class="filter" data-filter="other">その他</button></div>
@@ -114,22 +117,21 @@
 
   <dialog id="projectDialog">
     <form method="dialog" id="projectForm">
-      <div class="dialog-head"><h2 id="projectDialogTitle">新規プロジェクト</h2><button class="icon-btn" value="cancel" aria-label="閉じる">×</button></div>
+      <div class="dialog-head"><h2 id="projectDialogTitle">新規プロジェクト</h2><button type="button" class="icon-btn" data-close-dialog="projectDialog" aria-label="閉じる">×</button></div>
       <input type="hidden" id="editProjectId">
       <label>プロジェクト名<input id="projectName" required maxlength="80" placeholder="例：ホラーゲーム制作"></label>
       <label>ジャンル<select id="projectGenre"><option value="illustration">イラスト</option><option value="video">動画</option><option value="game">ゲーム</option><option value="3d">3D</option></select></label>
       <label>目標・説明<textarea id="projectDescription" rows="3" placeholder="完成させたいもの、目的など"></textarea></label>
-      <label>進捗 <input id="projectProgress" type="number" min="0" max="100" value="0"></label>
-      <div class="button-row"><button class="secondary" value="cancel">キャンセル</button><button class="primary" id="saveProject" value="default">保存</button></div>
+      <div class="button-row"><button type="button" class="secondary" data-close-dialog="projectDialog">キャンセル</button><button type="submit" class="primary" id="saveProject">保存</button></div>
     </form>
   </dialog>
 
   <dialog id="taskDialog">
     <form method="dialog" id="taskForm">
-      <div class="dialog-head"><h2>タスクを追加</h2><button class="icon-btn" value="cancel">×</button></div>
-      <input type="hidden" id="taskProjectId">
+      <div class="dialog-head"><h2 id="taskDialogTitle">タスクを追加</h2><button type="button" class="icon-btn" data-close-dialog="taskDialog" aria-label="閉じる">×</button></div>
+      <input type="hidden" id="taskProjectId"><input type="hidden" id="editTaskId">
       <label>タスク名<input id="taskName" required maxlength="100" placeholder="例：キャラクター案を3つ描く"></label>
-      <div class="button-row"><button class="secondary" value="cancel">キャンセル</button><button class="primary" id="saveTask" value="default">追加</button></div>
+      <div class="button-row"><button type="button" class="secondary" data-close-dialog="taskDialog">キャンセル</button><button type="submit" class="primary" id="saveTask">追加</button></div>
     </form>
   </dialog>
   <div id="toast" class="toast" role="status"></div>
