@@ -39,3 +39,19 @@
 
 /* v6 AI assistant */
 .assistant-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0}.assistant-tab{min-width:0;padding:11px 4px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--muted);font-size:12px;font-weight:700}.assistant-tab.active{background:#332d67;border-color:var(--accent);color:#fff;box-shadow:0 0 0 1px #8b7cff33}.assistant-intro{margin:10px 0;padding:14px}.assistant-intro p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.7}.workflow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:14px 0}.workflow-step{padding:8px 3px;border-radius:9px;background:var(--panel);color:var(--muted);text-align:center;font-size:10px;border:1px solid var(--line)}.workflow-step.active{background:#332d67;color:#fff;border-color:var(--accent)}@media(max-width:380px){.assistant-tab{font-size:10px;padding:10px 2px}.workflow-step{font-size:9px}}
+
+/* v7: project-linked saved answers */
+.project-responses{margin-top:16px;padding-top:13px;border-top:1px solid var(--line)}
+.project-responses-head,.project-response-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.project-responses-head{font-size:12px;margin-bottom:9px}
+.project-response-item{background:#101a2d;border:1px solid #34415e;border-radius:13px;padding:11px;margin-top:8px}
+.project-response-meta{font-size:11px;flex-wrap:wrap}.project-response-meta small{color:var(--muted);font-size:9px}
+.project-response-item p{font-size:11px;line-height:1.65;color:#c4cce0;overflow-wrap:anywhere;margin:8px 0}
+.response-empty{margin:7px 0 2px;font-size:10px}
+.response-view-dialog{width:min(94%,680px)}
+.response-view-dialog .dialog-head h2{margin:0 0 4px;font-size:17px}
+.response-view-body{font-size:13px;line-height:1.8;overflow-wrap:anywhere;max-height:65vh;overflow:auto;color:#dce4f5}
+.response-view-body h2,.response-view-body h3,.response-view-body h4{line-height:1.45;margin:18px 0 8px;color:#fff}
+.response-view-body p{margin:9px 0}.response-view-body ul{padding-left:22px}.response-view-body li{margin:5px 0}
+.response-view-body a{color:#b9adff;overflow-wrap:anywhere}.response-view-body code{background:#27334c;padding:2px 5px;border-radius:5px}
+.answer-image{display:block;max-width:100%;height:auto;max-height:420px;object-fit:contain;margin:12px auto;border-radius:10px;background:#0d1525}

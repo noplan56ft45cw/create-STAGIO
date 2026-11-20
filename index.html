@@ -134,6 +134,12 @@
     </form>
   </dialog>
 
+  <dialog id="responseViewDialog" class="response-view-dialog">
+    <div class="dialog-head"><div><h2 id="responseViewTitle">制作回答</h2><small id="responseViewMeta" class="muted"></small></div><button type="button" class="icon-btn" data-close-dialog="responseViewDialog" aria-label="閉じる">×</button></div>
+    <div id="responseViewBody" class="response-view-body"></div>
+    <div class="button-row"><button type="button" class="secondary" data-close-dialog="responseViewDialog">閉じる</button></div>
+  </dialog>
+
   <dialog id="taskDialog">
     <form method="dialog" id="taskForm">
       <div class="dialog-head"><h2 id="taskDialogTitle">タスクを追加</h2><button type="button" class="icon-btn" data-close-dialog="taskDialog" aria-label="閉じる">×</button></div>
