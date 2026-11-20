@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="イラスト・動画・ゲーム・3D制作をまとめる個人用クリエイティブ管理アプリ">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./style.css">
+  <title>Creative Studio</title>
+</head>
+<body>
+  <header class="topbar">
+    <div><div class="eyebrow">MY CREATIVE WORKSPACE</div><h1>Creative Studio</h1></div>
+    <button class="icon-btn" id="quickAdd" aria-label="新規プロジェクト">＋</button>
+  </header>
+
+  <main id="app">
+    <section class="page active" id="homePage">
+      <div class="welcome panel">
+        <div><span class="eyebrow">YOUR IDEAS, IN ONE PLACE</span><h2>今日も、つくろう。</h2><p>4つの制作ジャンルをまとめて管理。</p></div>
+        <div class="spark">✦</div>
+      </div>
+      <div class="section-head"><h2>制作ジャンル</h2><span class="muted">ジャンルから探す</span></div>
+      <div class="genre-grid">
+        <button class="genre-card" data-genre="illustration"><span class="genre-icon pink">✎</span><b>イラスト</b><small>キャラクター・背景</small></button>
+        <button class="genre-card" data-genre="video"><span class="genre-icon orange">▶</span><b>動画</b><small>編集・ショート動画</small></button>
+        <button class="genre-card" data-genre="game"><span class="genre-icon blue">⌘</span><b>ゲーム</b><small>企画・開発・テスト</small></button>
+        <button class="genre-card" data-genre="3d"><span class="genre-icon green">◇</span><b>3D</b><small>モデル・アニメーション</small></button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat panel"><span class="muted">プロジェクト</span><strong id="projectCount">0</strong><small>件</small></div>
+        <div class="stat panel"><span class="muted">完了タスク</span><strong id="doneCount">0</strong><small>件</small></div>
+        <div class="stat panel"><span class="muted">素材</span><strong id="assetCount">0</strong><small>件</small></div>
+      </div>
+      <div class="section-head"><h2>最近のプロジェクト</h2><button class="text-btn" data-page="projectsPage">すべて見る →</button></div>
+      <div id="recentProjects" class="stack"></div>
+      <div class="section-head"><h2>今日のタスク</h2><button class="text-btn" data-page="projectsPage">タスク一覧 →</button></div>
+      <div id="todayTasks" class="stack"></div>
+    </section>
+
+    <section class="page" id="projectsPage">
+      <div class="page-title"><div><span class="eyebrow">PLAN & TRACK</span><h2>プロジェクト</h2></div><button class="primary" id="addProject">＋ 新規作成</button></div>
+      <div class="filters" id="projectFilters">
+        <button class="filter active" data-filter="all">すべて</button>
+        <button class="filter" data-filter="illustration">イラスト</button>
+        <button class="filter" data-filter="video">動画</button>
+        <button class="filter" data-filter="game">ゲーム</button>
+        <button class="filter" data-filter="3d">3D</button>
+      </div>
+      <div id="projectList" class="stack"></div>
+    </section>
+
+    <section class="page" id="bridgePage">
+      <div class="page-title"><div><span class="eyebrow">IDEA TO PROMPT</span><h2>ChatGPT連携</h2></div></div>
+      <div class="panel form-panel">
+        <label>制作ジャンル<select id="promptGenre"><option value="illustration">イラスト</option><option value="video">動画</option><option value="game">ゲーム</option><option value="3d">3D</option><option value="general">その他</option></select></label>
+        <label>作りたいもの<input id="promptGoal" placeholder="例：オリジナルキャラクターの立ち絵を作りたい"></label>
+        <label>希望・条件<textarea id="promptNotes" rows="4" placeholder="雰囲気、サイズ、使うアプリ、避けたいことなど"></textarea></label>
+        <button class="primary full" id="makePrompt">プロンプトを作成</button>
+      </div>
+      <div class="section-head"><h2>生成された指示文</h2><span class="muted">編集して使えます</span></div>
+      <textarea id="promptOutput" class="prompt-output" rows="10" placeholder="ここに指示文が表示されます。"></textarea>
+      <div class="button-row"><button class="secondary" id="copyPrompt">コピー</button><button class="primary" id="openChatGPT">ChatGPTを開く ↗</button></div>
+      <div class="panel tip"><b>使い方</b><p>①指示文を作成 → ②コピー → ③ChatGPTで貼り付け。回答は下に保存できます。</p></div>
+      <label class="response-label">ChatGPTの回答・メモ<textarea id="responseNote" rows="5" placeholder="回答や制作メモを貼り付け"></textarea></label>
+      <button class="secondary full" id="saveResponse">回答を保存</button>
+      <div id="savedResponses" class="stack"></div>
+    </section>
+
+    <section class="page" id="assetsPage">
+      <div class="page-title"><div><span class="eyebrow">YOUR MATERIALS</span><h2>素材ライブラリ</h2></div><button class="primary" id="importAssets">＋ 追加</button></div>
+      <p class="muted small">画像・動画・音声・3Dデータなどを端末から追加できます。保存容量はブラウザの設定に依存します。</p>
+      <input type="file" id="assetPicker" hidden multiple accept="image/*,video/*,audio/*,.glb,.gltf,.obj,.fbx,.blend,.zip,.pdf">
+      <div class="filters" id="assetFilters"><button class="filter active" data-filter="all">すべて</button><button class="filter" data-filter="image">画像</button><button class="filter" data-filter="video">動画</button><button class="filter" data-filter="audio">音声</button><button class="filter" data-filter="other">その他</button></div>
+      <div id="assetList" class="asset-grid"></div>
+    </section>
+
+    <section class="page" id="appsPage">
+      <div class="page-title"><div><span class="eyebrow">TOOLS & WORKFLOW</span><h2>制作アプリ</h2></div></div>
+      <p class="muted small">アプリ名をタップして公式サイトを開きます。インストール済みアプリへの直接起動は端末やアプリ側の対応に依存します。</p>
+      <div class="app-list">
+        <a class="app-item" href="https://ibispaint.com/" target="_blank" rel="noopener"><span class="app-logo pink">✎</span><span><b>ibisPaint X</b><small>イラスト制作</small></span><span class="arrow">↗</span></a>
+        <a class="app-item" href="https://www.capcut.com/" target="_blank" rel="noopener"><span class="app-logo orange">▶</span><span><b>CapCut</b><small>動画編集</small></span><span class="arrow">↗</span></a>
+        <a class="app-item" href="https://prisma3d.net/" target="_blank" rel="noopener"><span class="app-logo green">◇</span><span><b>Prisma3D</b><small>3Dモデリング</small></span><span class="arrow">↗</span></a>
+        <a class="app-item" href="https://www.figma.com/" target="_blank" rel="noopener"><span class="app-logo purple">F</span><span><b>Figma</b><small>UI・デザイン</small></span><span class="arrow">↗</span></a>
+        <a class="app-item" href="https://replit.com/" target="_blank" rel="noopener"><span class="app-logo blue">⌘</span><span><b>Replit</b><small>ブラウザ開発</small></span><span class="arrow">↗</span></a>
+        <a class="app-item" href="https://higgsfield.ai/" target="_blank" rel="noopener"><span class="app-logo purple">✦</span><span><b>Higgsfield</b><small>AI映像・画像</small></span><span class="arrow">↗</span></a>
+      </div>
+    </section>
+
+    <section class="page" id="settingsPage">
+      <div class="page-title"><div><span class="eyebrow">PREFERENCES</span><h2>設定・バックアップ</h2></div></div>
+      <div class="panel settings-panel">
+        <h3>データのバックアップ</h3><p class="muted small">プロジェクト・タスク・メモをJSONファイルに保存できます。素材ファイル本体は含まれません。</p>
+        <button class="primary full" id="exportData">JSONを書き出す</button>
+        <label class="file-import">バックアップを復元<input type="file" id="importData" accept="application/json"></label>
+      </div>
+      <div class="panel settings-panel"><h3>保存状況</h3><p class="muted small" id="storageInfo">端末内にデータを保存しています。</p><button class="secondary full" id="refreshStorage">容量を確認</button></div>
+      <div class="panel settings-panel danger-zone"><h3>データの削除</h3><p class="muted small">すべてのプロジェクト・素材・メモを削除します。元に戻せません。</p><button class="danger full" id="clearData">すべてのデータを削除</button></div>
+      <p class="muted tiny center">Creative Studio · 個人用ローカル管理アプリ</p>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="homePage"><span>⌂</span><small>ホーム</small></button>
+    <button class="nav-item" data-page="projectsPage"><span>▤</span><small>プロジェクト</small></button>
+    <button class="nav-item" data-page="bridgePage"><span>✧</span><small>ChatGPT</small></button>
+    <button class="nav-item" data-page="assetsPage"><span>▧</span><small>素材</small></button>
+    <button class="nav-item" data-page="appsPage"><span>◈</span><small>アプリ</small></button>
+    <button class="nav-item" data-page="settingsPage"><span>⚙</span><small>設定</small></button>
+  </nav>
+
+  <dialog id="projectDialog">
+    <form method="dialog" id="projectForm">
+      <div class="dialog-head"><h2 id="projectDialogTitle">新規プロジェクト</h2><button class="icon-btn" value="cancel" aria-label="閉じる">×</button></div>
+      <input type="hidden" id="editProjectId">
+      <label>プロジェクト名<input id="projectName" required maxlength="80" placeholder="例：ホラーゲーム制作"></label>
+      <label>ジャンル<select id="projectGenre"><option value="illustration">イラスト</option><option value="video">動画</option><option value="game">ゲーム</option><option value="3d">3D</option></select></label>
+      <label>目標・説明<textarea id="projectDescription" rows="3" placeholder="完成させたいもの、目的など"></textarea></label>
+      <label>進捗 <input id="projectProgress" type="number" min="0" max="100" value="0"></label>
+      <div class="button-row"><button class="secondary" value="cancel">キャンセル</button><button class="primary" id="saveProject" value="default">保存</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="taskDialog">
+    <form method="dialog" id="taskForm">
+      <div class="dialog-head"><h2>タスクを追加</h2><button class="icon-btn" value="cancel">×</button></div>
+      <input type="hidden" id="taskProjectId">
+      <label>タスク名<input id="taskName" required maxlength="100" placeholder="例：キャラクター案を3つ描く"></label>
+      <div class="button-row"><button class="secondary" value="cancel">キャンセル</button><button class="primary" id="saveTask" value="default">追加</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
