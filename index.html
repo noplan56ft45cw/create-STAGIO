@@ -70,6 +70,14 @@
         <label>希望・条件<textarea id="promptNotes" rows="4" placeholder="雰囲気、サイズ、使うアプリ、避けたいことなど"></textarea></label>
         <div class="button-row"><button class="primary" id="makePrompt">① 制作指示文を作成</button><button class="secondary" id="clearPrompt">新しい制作／入力クリア</button></div>
       </div>
+      <section class="panel production-panel">
+        <div class="production-head"><div><span class="eyebrow">STEP-BY-STEP PRODUCTION</span><h3>工程別制作ワークフロー</h3></div><span class="tag" id="workflowProgress">0 / 6 完了</span></div>
+        <p class="muted small">工程を選び、専用の指示文を作成します。内容を確認してから実行し、結果を保存して次へ進みます。</p>
+        <div id="workflowStages" class="workflow-stage-list"></div>
+        <div class="workflow-current" id="workflowCurrent"><b>工程を選択してください</b><p class="muted small">選択した工程の指示文と成果物をここで管理します。</p></div>
+        <label class="response-label">この工程の成果・メモ<textarea id="workflowResult" rows="4" placeholder="ChatGPTの回答、作業結果、修正点など"></textarea></label>
+        <div class="button-row"><button class="secondary" id="saveWorkflowResult">工程の結果を保存</button><button class="primary" id="completeWorkflowStage">この工程を完了</button></div>
+      </section>
       <div class="section-head"><h2>生成された指示文</h2><span class="muted">編集して使えます</span></div>
       <textarea id="promptOutput" class="prompt-output" rows="10" placeholder="ここに指示文が表示されます。"></textarea>
       <div class="button-row"><button class="secondary" id="copyPrompt">② 指示文をコピー</button><button class="primary" id="openChatGPT">③ ChatGPTを開く ↗</button></div>

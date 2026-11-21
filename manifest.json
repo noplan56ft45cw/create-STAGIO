@@ -1,7 +1,7 @@
 {
-  "name": "Creative Studio v9",
+  "name": "Creative Studio v10",
   "short_name": "Creative Studio",
-  "description": "個人用クリエイティブ制作管理アプリ",
+  "description": "4ジャンル対応の半自動クリエイティブ制作アプリ",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
